@@ -243,9 +243,14 @@ app.post('/api/ai/analyze', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
-    app.get('/', (req, res) => {
-  res.send('Server is running 🚀');
+// ROOT route (put this ABOVE app.listen)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
+
+// IMPORTANT: use Render port
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
 });
