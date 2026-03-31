@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skillon – Hyper-Personalized Learning</title>
+    <meta name="description" content="AI-powered adaptive learning platform that generates dynamic, non-linear career roadmaps based on your skills and behavior.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- SIDEBAR NAV -->
+  <nav class="sidebar">
+    <div class="logo"><i class="fa-solid fa-graduation-cap"></i> Skillon</div>
+    <ul class="nav-links">
+      <li id="nav-dashboard" class="nav-item active" onclick="appState.navigate('dashboard')">
+        <i class="fa-solid fa-house"></i> Dashboard
+      </li>
+      <li id="nav-roadmap" class="nav-item" onclick="appState.navigate('roadmap')">
+        <i class="fa-solid fa-map-location-dot"></i> Roadmap
+      </li>
+      <li id="nav-learning" class="nav-item" onclick="appState.navigate('learning')">
+        <i class="fa-solid fa-book-open-reader"></i> Current Focus
+      </li>
+    </ul>
+    <div class="sim-panel">
+      <p class="sim-label">DEV TOOLS</p>
+      <button class="btn-sim" onclick="api.simulateInactive()">
+        <i class="fa-solid fa-clock"></i> Simulate Inactivity
+      </button>
+      <button class="btn-sim alt" onclick="appState.showLogin()">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Re-run Calibration
+      </button>
+      <button class="btn-sim" onclick="appState.logout()" style="margin-top: 10px; border-color: rgba(239, 68, 68, 0.4); color: #ef4444; background: rgba(239, 68, 68, 0.05);">
+        <i class="fa-solid fa-power-off"></i> Log Out
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="content-area">
+
+    <!-- ======= LOGIN OVERLAY ======= -->
+    <div id="login-overlay" class="overlay hidden">
+      <div class="modal-box glass-heavy">
+        <div class="modal-icon"><i class="fa-solid fa-user-astronaut"></i></div>
+        <h2>Welcome to Skillon</h2>
+        <p class="modal-sub">Log in to enter the hyper-personalized learning matrix.</p>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input id="login-name" type="text" placeholder="e.g. Alex" class="inp" />
+        </div>
+        <button class="btn primary full mt-3" onclick="appState.startAssessment()">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i> Enter Skillon
+        </button>
+      </div>
+    </div>
+
+    <!-- ======= NEW ARJUN ASSESSMENT OVERLAY ======= -->
+    <div id="assessment-overlay" class="overlay hidden">
+      <div class="modal-box glass-heavy" style="max-width: 680px; text-align: left;">
+        
+        <!-- STEP 0: GOAL -->
+        <div id="step-0" class="assess-step">
+          <h2 style="color:white; margin-bottom:12px;">Step 0: Your Goal</h2>
+          <p class="modal-sub">Be specific. What are you trying to achieve?</p>
+          <textarea id="arjun-goal" class="inp" rows="3" placeholder="e.g., I want to get a backend engineering job at a product company like Razorpay or Swiggy."></textarea>
+          <button class="btn primary mt-3" onclick="appState.nextAssessStep(1)">Next Step <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <!-- STEP 1: TAG CLOUD -->
+        <div id="step-1" class="assess-step hidden">
+          <h2 style="color:white; margin-bottom:12px;">Step 1: Experience Cloud</h2>
+          <p class="modal-sub">Tap everything you've actually used. Even if just for a side project.</p>
+          <div class="chip-group" id="arjun-tags">
+            <span class="chip" onclick="toggleChipMulti(this)">JavaScript / Node.js</span>
+            <span class="chip" onclick="toggleChipMulti(this)">SQL</span>
+            <span class="chip" onclick="toggleChipMulti(this)">REST APIs</span>
+            <span class="chip" onclick="toggleChipMulti(this)">Git</span>
+            <span class="chip" onclick="toggleChipMulti(this)">Docker</span>
+            <span class="chip" onclick="toggleChipMulti(this)">System Design</span>
+            <span class="chip" onclick="toggleChipMulti(this)">Data Structures & Algorithms</span>
+            <span class="chip" onclick="toggleChipMulti(this)">Python</span>
+            <span class="chip" onclick="toggleChipMulti(this)">AWS / Cloud</span>
+            <span class="chip" onclick="toggleChipMulti(this)">Message Queues</span>
+          </div>
+          <button class="btn primary mt-3" onclick="appState.nextAssessStep(2)">Next Step <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <!-- STEP 2: CHECKBOXES -->
+        <div id="step-2" class="assess-step hidden">
+          <h2 style="color:white; margin-bottom:12px;">Step 2: Self Calibration</h2>
+          <p class="modal-sub" style="margin-bottom:20px;">Can you do this comfortably right now?</p>
+          
+          <div class="check-q">
+            <p><strong>1. Write a backend API endpoint from scratch — routing, validation, connecting to a db.</strong></p>
+            <select class="inp" style="margin-top:8px;">
+              <option>🟢 Yes, done this many times</option>
+              <option>🟡 Yes but I'd need to look some things up</option>
+              <option>🔴 Not really</option>
+            </select>
+          </div>
+
+          <div class="check-q mt-3">
+            <p><strong>2. Look at a database query that is running slow and have a conversation about why.</strong></p>
+            <select class="inp" style="margin-top:8px;">
+              <option>🟡 I know indexes exist but the details get fuzzy (Selected)</option>
+              <option>🟢 Yes, I know what to look for</option>
+              <option>🔴 I wouldn't know where to start</option>
+            </select>
+          </div>
+
+          <div class="check-q mt-3">
+            <p><strong>3. Design a system on a whiteboard — explain components, what breaks under load.</strong></p>
+            <select class="inp" style="margin-top:8px;">
+              <option>🔴 I haven't really done this (Selected)</option>
+              <option>🟢 Yes, I've thought about this</option>
+              <option>🟡 I have opinions but I'm not structured</option>
+            </select>
+          </div>
+
+          <button class="btn primary mt-3" onclick="appState.nextAssessStep(3)">Submit Calibration</button>
+        </div>
+
+        <!-- STEP 3: THE ONE TASK -->
+        <div id="step-3" class="assess-step hidden">
+          <h2 style="color:white; margin-bottom:12px;">Step 3: The Diagnostic Task</h2>
+          <div class="scenario-box" style="margin-bottom: 16px;">
+            <strong>Situation:</strong> You joined a new company. Backend is Node.js, PostgreSQL. A senior engineer says: <br><br>
+            <em>"The orders page is loading in 8 seconds. Users are complaining. I've looked at it briefly — the query is pulling from the orders table which has 4 million rows. Can you take it from here?"</em><br><br>
+            You open the query:
+            <pre style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-top:8px; color:#A1A1AA;"><code>SELECT * FROM orders
+WHERE customer_id = 1042
+ORDER BY created_at DESC
+LIMIT 20;</code></pre>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 10px;">Walk the senior engineer through your thinking. What do you look at, suspect, and do first?</p>
+          <textarea id="arjun-task" class="inp" rows="4" placeholder="Type your response here..."></textarea>
+          <button class="btn accent mt-3" onclick="appState.analyzeAndGenerate()">Analyze & Generate Roadmap</button>
+        </div>
+
+        <!-- STEP 4: ANALYSIS RESULT -->
+        <div id="step-4" class="assess-step hidden">
+          <div class="modal-icon"><i class="fa-solid fa-microchip"></i></div>
+          <h2 style="color:white; text-align:center;">Analysis Complete</h2>
+          <div id="analysis-report" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-top: 20px;">
+            <!-- Injected by JS -->
+          </div>
+          <button class="btn success full mt-3" onclick="appState.finishCalibration()">View My Roadmap</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ======= WELCOME BACK MODAL ======= -->
+    <div id="comeback-modal" class="overlay hidden">
+      <div class="modal-box glass-heavy comeback-box">
+        <div class="comeback-emoji">👋</div>
+        <h2>Welcome Back, <span id="wb-name">Learner</span>!</h2>
+        <p>You've been away for a bit. Instead of throwing you back to the deep end, Skillon has prepared a gentle comeback path.</p>
+        <div class="comeback-path">
+          <div class="cp-node done"><i class="fa-solid fa-check"></i> Quick Review</div>
+          <div class="cp-arrow">→</div>
+          <div class="cp-node active"><i class="fa-solid fa-fire"></i> Resume Topic</div>
+          <div class="cp-arrow">→</div>
+          <div class="cp-node locked"><i class="fa-solid fa-lock"></i> Next Challenge</div>
+        </div>
+        <button class="btn primary" onclick="appState.dismissComeback()">
+          <i class="fa-solid fa-play"></i> Start My Comeback
+        </button>
+      </div>
+    </div>
+
+    <!-- ======= QUIZ MODAL ======= -->
+    <div id="quiz-modal" class="overlay hidden">
+      <div class="modal-box glass-heavy">
+        <div class="modal-icon"><i class="fa-solid fa-clipboard-question"></i></div>
+        <h2>Knowledge Check</h2>
+        <p class="modal-sub" id="quiz-question">Loading question...</p>
+        <div class="quiz-options" id="quiz-options">
+          <!-- Options will be injected here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= SCREEN: DASHBOARD ======= -->
+    <section id="dashboard-screen" class="screen active">
+      <header class="screen-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="screen-sub">Welcome back, <span id="dash-name" class="accent">Learner</span></p>
+        </div>
+        <div class="status-badge" id="user-status-badge"><span class="dot"></span> Active</div>
+      </header>
+
+      <div class="dash-grid">
+
+        <!-- Confidence Index Card -->
+        <div class="card glass ci-card">
+          <div class="card-header">
+            <h3>Skill Confidence Index</h3>
+            <span class="tag">Live</span>
+          </div>
+          <div class="ci-ring-wrap">
+            <svg class="ci-ring" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" class="ring-bg"/>
+              <circle cx="60" cy="60" r="50" class="ring-fill" id="ci-circle"
+                stroke-dasharray="0 314" stroke-dashoffset="78.5"/>
+            </svg>
+            <div class="ci-center">
+              <span id="ci-value">0</span>
+              <small>/100</small>
+            </div>
+          </div>
+          <div class="ci-breakdown">
+            <div class="ci-item"><span>Quiz</span><div class="ci-bar"><div class="ci-fill" id="ci-quiz" style="width:0%"></div></div></div>
+            <div class="ci-item"><span>Tasks</span><div class="ci-bar"><div class="ci-fill" id="ci-tasks" style="width:0%"></div></div></div>
+            <div class="ci-item"><span>Streak</span><div class="ci-bar"><div class="ci-fill streak" id="ci-streak" style="width:30%"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Current Focus Card -->
+        <div class="card glass focus-card">
+          <div class="card-header">
+            <h3>Current Focus</h3>
+            <span class="tag info" id="focus-type-tag">Concept</span>
+          </div>
+          <h2 id="focus-title" class="focus-title">Loading...</h2>
+          <p id="focus-desc" class="focus-desc">Gathering your progress...</p>
+          <div class="focus-meta">
+            <span id="focus-diff" class="diff-tag">Normal</span>
+          </div>
+          <button class="btn primary mt-auto" onclick="appState.navigate('learning')">
+            Resume Learning <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- AI Analysis Card -->
+        <div class="card glass ai-card">
+          <div class="card-header">
+            <h3>AI Analysis</h3>
+            <i class="fa-solid fa-robot" style="color:var(--accent)"></i>
+          </div>
+          <div class="ai-msg" id="ai-msg">
+            <div class="ai-pulse"></div>
+            <p id="ai-msg-text">Analyzing your learning rhythm...</p>
+          </div>
+          <div class="streak-row">
+            <div class="streak-box">
+              <i class="fa-solid fa-fire"></i>
+              <div><span id="streak-count">1</span><small>Day Streak</small></div>
+            </div>
+            <div class="streak-box">
+              <i class="fa-solid fa-trophy"></i>
+              <div><span id="badge-count">0</span><small>Badges</small></div>
+            </div>
+            <div class="streak-box">
+              <i class="fa-solid fa-check-double"></i>
+              <div><span id="tasks-done">0</span><small>Completed</small></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges -->
+        <div class="card glass badge-card">
+          <div class="card-header"><h3>Achievements</h3></div>
+          <div class="badge-grid" id="badge-grid">
+            <div class="achv-badge locked" title="First Steps – Complete your first task"><i class="fa-solid fa-shoe-prints"></i></div>
+            <div class="achv-badge locked" title="Consistent – 3-day streak"><i class="fa-solid fa-fire"></i></div>
+            <div class="achv-badge locked" title="Builder – Complete a project"><i class="fa-solid fa-hammer"></i></div>
+            <div class="achv-badge locked" title="Comeback Kid – Return after inactivity"><i class="fa-solid fa-rotate-left"></i></div>
+            <div class="achv-badge locked" title="Master – 80+ confidence"><i class="fa-solid fa-star"></i></div>
+            <div class="achv-badge locked" title="Unstoppable – No struggle 5 tasks"><i class="fa-solid fa-bolt"></i></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======= SCREEN: ROADMAP ======= -->
+    <section id="roadmap-screen" class="screen hidden">
+      <header class="screen-header">
+        <div>
+          <h1>Your Dynamic Roadmap</h1>
+          <p class="screen-sub">A non-linear, AI-adapted learning graph. Click any node to focus it.</p>
+        </div>
+        <div class="legend">
+          <span class="leg-item"><span class="leg-dot done"></span> Done</span>
+          <span class="leg-item"><span class="leg-dot pending"></span> Active</span>
+          <span class="leg-item"><span class="leg-dot locked"></span> Locked</span>
+          <span class="leg-item"><span class="leg-dot project"></span> Project</span>
+        </div>
+      </header>
+      <div class="card glass" style="padding:0;overflow:hidden;">
+        <div id="roadmap-network" style="height:520px;"></div>
+      </div>
+      <div id="node-detail-panel" class="node-panel hidden glass">
+        <div class="node-panel-inner">
+          <h3 id="np-title">Node Title</h3>
+          <span class="tag" id="np-type">Concept</span>
+          <p id="np-why"><strong>Why this matters:</strong> ...</p>
+          <p id="np-prereqs"><strong>Prerequisites:</strong> None</p>
+          <button class="btn primary sm" onclick="appState.focusNode()">Set as Current Focus</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= SCREEN: LEARNING ======= -->
+    <section id="learning-screen" class="screen hidden">
+      <header class="screen-header">
+        <div>
+          <h1 id="learn-title">Task Title</h1>
+          <div class="learn-tags">
+            <span class="tag" id="learn-type">Concept</span>
+            <span class="diff-tag" id="learn-diff">Normal</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="learn-grid">
+
+        <div class="card glass">
+          <div class="section-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <h3>Why This Matters</h3>
+          <p id="learn-explanation" class="learn-body">...</p>
+        </div>
+
+        <div class="card glass">
+          <div class="section-icon"><i class="fa-solid fa-network-wired"></i></div>
+          <h3>Prerequisites</h3>
+          <ul id="learn-prereqs" class="prereq-list"></ul>
+        </div>
+
+        <div class="card glass micro-card">
+          <div class="section-icon"><i class="fa-solid fa-laptop-code"></i></div>
+          <h3>Micro-Project Challenge</h3>
+          <p id="micro-project-text" class="learn-body">...</p>
+          <button class="btn accent sm mt-2" onclick="appState.startMicroProject()">
+            <i class="fa-solid fa-play"></i> Start Project
+          </button>
+        </div>
+
+        <div class="card glass actions-card">
+          <h3>How did it go?</h3>
+          <p class="fade">Your response trains the adaptive engine.</p>
+          <div class="action-buttons">
+            <button class="btn success" id="btn-complete" onclick="appState.completeTask()">
+              <i class="fa-solid fa-check-circle"></i> Got It! (Complete)
+            </button>
+            <button class="btn warning" id="btn-struggle" onclick="appState.struggleTask()">
+              <i class="fa-solid fa-triangle-exclamation"></i> I'm Struggling
+            </button>
+            <button class="btn ghost" id="btn-skip" onclick="appState.skipTask()">
+              <i class="fa-solid fa-forward-step"></i> Skip
+            </button>
+          </div>
+          <p class="hint-text" id="struggle-hint"></p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ======= AI CHATBOX WIDGET ======= -->
+<div id="chat-widget" class="chat-widget closed">
+  <div class="chat-header" onclick="appState.toggleChat()">
+    <div class="chat-title">
+      <i class="fa-solid fa-robot"></i> FutureYou AI Guide
+    </div>
+    <i class="fa-solid fa-chevron-up toggle-icon"></i>
+  </div>
+  <div class="chat-body" id="chat-body">
+    <div class="chat-msg ai">Hello! I'm your AI guide from 5 years in the future. I'll help you navigate this roadmap and stay motivated. What's on your mind?</div>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" id="chat-input" placeholder="Ask for guidance..." onkeypress="appState.handleChatKey(event)" />
+    <button class="btn primary sm" onclick="appState.sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
