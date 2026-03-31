@@ -18,7 +18,7 @@ Most apps force users into static quizzes or one-size-fits-all roadmaps. Skillon
 
 ## 🧩 Core Platform Features
 
-### 1. The "Arjun Flow" Calibration (New!)
+### 1. The Calibration 
 - **What it does:** Replaces generic questionnaires with a high-stakes, 4-step diagnostic flow (Goal -> Tag Cloud -> Self-Calibration -> Diagnostic Postgres task).
 - **Tech Logic:** Uses OpenAI (GPT-4) to read free-text answers and locate exact percentage gaps in your knowledge, routing you safely away from beginner material directly to advanced architectural nodes.
 
