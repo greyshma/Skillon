@@ -1,6 +1,5 @@
 # 🧠 Skillon – Hyper-Personalized Learning & Career Optimizer
 
-![Skillon Banner](https://via.placeholder.com/1200x400/050508/00F0FF?text=Skillon+-+Hyper-Personalized+Learning)
 
 **Skillon** is a dynamic, next-generation learning and career roadmap platform built to conquer traditional, rigid learning systems. Instead of enforcing linear course lists, Skillon leverages an AI-driven **Capability Graph** to craft hyper-personalized, adaptive paths that align with your timeline, mood, and skill level in real time. 
 
