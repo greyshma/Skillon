@@ -102,6 +102,17 @@ It takes 30 seconds to get the environment running locally.
 - **Phase 3:** Integrate complete LLM micro-service handling for "FutureYou AI".
 - **Phase 4:** Expand Opportunity Cost computations via Glassdoor / LinkedIn APIs.
 ## Preview of the app
+![alt image](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20184918.png)
+![img alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185011.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185048.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185105.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185124.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185141.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185236.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185305.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185335.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185401.png)
+![image alt](https://github.com/greyshma/Skillon/blob/c08856d768fdf54ad2334e62e6d948d4cdfc7fc8/Screenshot%202026-03-31%20185434.png)
 
 ****
 
