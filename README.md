@@ -101,5 +101,8 @@ It takes 30 seconds to get the environment running locally.
 - **Phase 2:** Integrate live Neo4j database graph queries to handle tens of thousands of dynamic job clusters.
 - **Phase 3:** Integrate complete LLM micro-service handling for "FutureYou AI".
 - **Phase 4:** Expand Opportunity Cost computations via Glassdoor / LinkedIn APIs.
+## Preview of the app
+
+****
 
 *Built with ❤️ for a hyper-personalized future of education.*
